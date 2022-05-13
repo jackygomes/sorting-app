@@ -9,12 +9,13 @@
 
           <div class="modal-body">
             <p>Enter a number of how many people you want to add to the list?</p>
-            <input type="text" @keypress="onlyNumber">
+            <input v-model="numberOfPeople" type="text" @keypress="onlyNumber">
+            <p v-if="warning" class="warning">You must input a number between 20 and 100.</p>
           </div>
 
           <div class="modal-footer">
             <button class="button" @click="$emit('close')" >Close</button>
-            <button class="button">Start!</button>
+            <button class="button" @click="startSorting">Start!</button>
           </div>
         </div>
       </div>
@@ -24,14 +25,30 @@
 
 <script>
 export default {
+  name: 'sorting-popup',
+  data() {
+    return {
+      numberOfPeople: 0,
+      warning: false,
+    }
+  },
   props: {
     show: Boolean
   },
   methods:{
-    onlyNumber ($event) {
+    onlyNumber ($event){
       let keyCode = ($event.keyCode ? $event.keyCode : $event.which);
       if ((keyCode < 48 || keyCode > 57) && keyCode !== 46) { // 46 is dot
           $event.preventDefault();
+      }
+    },
+    startSorting () {
+      if( this.numberOfPeople >= 20 && this.numberOfPeople <=100){
+        this.$emit('numberOfPeople', this.numberOfPeople);
+        this.$emit('close');
+        this.warning = false;
+      } else {
+        this.warning = true;
       }
     }
   }
@@ -91,6 +108,9 @@ export default {
     border: 1px solid #9f9f9f;
     border-radius: 3px;
     font-size: 16px;
+  }
+  .warning{
+    color: #ff6c6c
   }
 }
 .modal-footer {
