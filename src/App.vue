@@ -1,15 +1,16 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div>
+    <SortingWrapper />
+  </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import SortingWrapper from './components/SortingWrapper.vue'
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    SortingWrapper
   }
 }
 </script>
@@ -22,5 +23,15 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+}
+.button {
+  padding: 12px 20px;
+  vertical-align: middle;
+  color: #fff;
+  font-size: 15px;
+  background-color: #FF8D00;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
 }
 </style>
