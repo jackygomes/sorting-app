@@ -5,14 +5,14 @@
 </template>
 
 <script>
-import SortingWrapper from './components/SortingWrapper.vue'
+import SortingWrapper from "./components/SortingWrapper.vue";
 
 export default {
-  name: 'App',
+  name: "App",
   components: {
-    SortingWrapper
-  }
-}
+    SortingWrapper,
+  },
+};
 </script>
 
 <style>
@@ -20,7 +20,6 @@ export default {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
   color: #2c3e50;
   margin-top: 60px;
 }
@@ -29,7 +28,7 @@ export default {
   vertical-align: middle;
   color: #fff;
   font-size: 15px;
-  background-color: #FF8D00;
+  background-color: #ff8d00;
   border: none;
   border-radius: 6px;
   cursor: pointer;

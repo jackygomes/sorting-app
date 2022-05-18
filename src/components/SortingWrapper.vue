@@ -177,8 +177,8 @@ export default {
       th {
         padding-top: 12px;
         padding-bottom: 12px;
-        text-align: center;
         background-color: #afdbf8;
+        text-align: left;
         color: #3a6785;
       }
 
@@ -189,6 +189,9 @@ export default {
       tr:hover {
         background-color: #afdbf8;
         color: #3a6785;
+      }
+      tr {
+        cursor: pointer;
       }
     }
   }
