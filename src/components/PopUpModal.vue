@@ -3,19 +3,49 @@
     <div v-if="show" class="modal-mask">
       <div class="modal-wrapper">
         <div class="modal-container">
-          <div class="modal-header">
-            <h3>How many people? <span><fa icon="close" @click="$emit('close')" /></span></h3>
+          <div v-if="!sorted">
+            <div class="modal-header">
+              <h3>
+                How many people?
+                <span><fa icon="close" @click="$emit('close')" /></span>
+              </h3>
+            </div>
+
+            <div class="modal-body">
+              <p>
+                Enter a number of how many people you want to add to the list?
+              </p>
+              <input
+                v-model="numberOfPeople"
+                type="text"
+                @keypress="onlyNumber"
+              />
+              <p v-if="warning" class="warning">
+                You must input a number between 20 and 100.
+              </p>
+            </div>
+
+            <div class="modal-footer">
+              <button class="button" @click="$emit('close')">Close</button>
+              <button class="button" @click="startSorting">Start!</button>
+            </div>
           </div>
 
-          <div class="modal-body">
-            <p>Enter a number of how many people you want to add to the list?</p>
-            <input v-model="numberOfPeople" type="text" @keypress="onlyNumber">
-            <p v-if="warning" class="warning">You must input a number between 20 and 100.</p>
-          </div>
+          <div v-if="sorted">
+            <div class="modal-header">
+              <h3>
+                Yay! You've successfully sorted the list!
+                <span><fa icon="close" @click="closeGame" /></span>
+              </h3>
+            </div>
 
-          <div class="modal-footer">
-            <button class="button" @click="$emit('close')" >Close</button>
-            <button class="button" @click="startSorting">Start!</button>
+            <div class="modal-body">
+              <h2>Your Score: {{ score }} Sec</h2>
+            </div>
+
+            <div class="modal-footer">
+              <button class="button" @click="closeGame">Close</button>
+            </div>
           </div>
         </div>
       </div>
@@ -25,34 +55,41 @@
 
 <script>
 export default {
-  name: 'sorting-popup',
+  name: "sorting-popup",
   data() {
     return {
       numberOfPeople: 0,
       warning: false,
-    }
+    };
   },
   props: {
-    show: Boolean
+    show: Boolean,
+    sorted: Boolean,
+    score: Number,
   },
-  methods:{
-    onlyNumber ($event){
-      let keyCode = ($event.keyCode ? $event.keyCode : $event.which);
-      if ((keyCode < 48 || keyCode > 57) && keyCode !== 46) { // 46 is dot
-          $event.preventDefault();
+  methods: {
+    onlyNumber($event) {
+      let keyCode = $event.keyCode ? $event.keyCode : $event.which;
+      if (keyCode < 48 || keyCode > 57) {
+        // 46 is dot
+        $event.preventDefault();
       }
     },
-    startSorting () {
-      if( this.numberOfPeople >= 20 && this.numberOfPeople <=100){
-        this.$emit('numberOfPeople', this.numberOfPeople);
-        this.$emit('close');
+    startSorting() {
+      if (this.numberOfPeople >= 20 && this.numberOfPeople <= 100) {
+        this.$emit("numberOfPeople", this.numberOfPeople);
+        this.$emit("close");
         this.warning = false;
       } else {
         this.warning = true;
       }
-    }
-  }
-}
+    },
+    closeGame() {
+      this.$emit("closeGame", true);
+      this.$emit("close");
+    },
+  },
+};
 </script>
 
 <style lang="scss">
@@ -109,8 +146,12 @@ export default {
     border-radius: 3px;
     font-size: 16px;
   }
-  .warning{
-    color: #ff6c6c
+  .warning {
+    color: #ff6c6c;
+  }
+  h2 {
+    padding: 30px 0 0;
+    text-align: center;
   }
 }
 .modal-footer {
@@ -121,12 +162,11 @@ export default {
     margin-left: 6px;
 
     &:first-child {
-      background-color: #EEEEEE;
+      background-color: #eeeeee;
       color: #000;
     }
   }
 }
-
 
 /*
  * The following styles are auto-applied to elements with
