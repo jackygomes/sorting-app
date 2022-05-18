@@ -12,10 +12,10 @@
       </button>
       <!-- <button class="button" @click="stop">stop</button> -->
     </h2>
-    <div class="list-section" v-if="numberOfPeopleList != 0">
+    <div class="list-section" v-if="people.length !== 0">
       <h3>
         <span class="timer">Time: {{ time }} Sec</span>
-        {{ numberOfPeopleList }} people in the list
+        {{ people.length }} people in the list
       </h3>
       <div class="list-wrapper">
         <table id="customers">
@@ -48,7 +48,6 @@
       </div>
     </div>
     <Teleport to="body">
-      <!-- use the modal component, pass in the prop -->
       <PopUp
         :show="showModal"
         :sorted="sorted"
@@ -66,22 +65,25 @@
 import PopUp from "./PopUpModal.vue";
 import { faker } from "@faker-js/faker";
 import draggable from "vuedraggable";
+import { shuffle } from "../utils/arrayShuffle";
 
 export default {
-  name: "sorting-main",
+  name: "SortingMain",
+  components: {
+    PopUp,
+    draggable,
+  },
   data() {
     return {
       showModal: false,
       people: [],
       potatoNumber: [],
-      numberOfPeopleList: 0,
       time: 0,
-      timer: undefined,
+      timer: null,
       gameOn: false,
       sorted: false,
     };
   },
-  mounted() {},
   methods: {
     checkSorting() {
       let isSorted = this.people.every(
@@ -89,21 +91,15 @@ export default {
       );
       if (isSorted) {
         this.stop();
-        this.showModal = true;
-        this.sorted = true;
       }
     },
     getNumberOfPeople(numberOfPeople) {
       this.people = [];
-      this.numberOfPeopleList = numberOfPeople;
 
-      let potatoesGenerate = Array(parseInt(numberOfPeople));
-
-      potatoesGenerate = potatoesGenerate
+      const potatoesGenerate = Array(parseInt(numberOfPeople))
         .fill(1)
-        .map((number, index) => index + 1);
-
-      let randomPotatoes = this.shuffle(potatoesGenerate);
+        .map((_, index) => index + 1);
+      const randomPotatoes = shuffle(potatoesGenerate);
 
       for (let i = 0; i < numberOfPeople; i++) {
         let tempPeople = {
@@ -124,26 +120,10 @@ export default {
     },
     stop() {
       clearInterval(this.timer);
+      this.showModal = true;
+      this.sorted = true;
     },
-    shuffle(array) {
-      let currentIndex = array.length,
-        randomIndex;
 
-      // While there remain elements to shuffle.
-      while (currentIndex != 0) {
-        // Pick a remaining element.
-        randomIndex = Math.floor(Math.random() * currentIndex);
-        currentIndex--;
-
-        // And swap it with the current element.
-        [array[currentIndex], array[randomIndex]] = [
-          array[randomIndex],
-          array[currentIndex],
-        ];
-      }
-
-      return array;
-    },
     closeGame() {
       this.people = [];
       this.gameOn = false;
@@ -152,10 +132,6 @@ export default {
       this.sorted = false;
     },
   },
-  components: {
-    PopUp,
-    draggable,
-  },
 };
 </script>
 
@@ -163,7 +139,7 @@ export default {
 .wrapper {
   border: 1px solid #ddd;
   padding: 20px;
-  width: 80%;
+  width: 800px;
   margin: 0 auto;
   border-radius: 3px;
   background-color: #f5f5f5;
